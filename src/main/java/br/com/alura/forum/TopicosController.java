@@ -28,37 +28,32 @@ import br.com.alura.forum.repository.TopicoRepository;
 @RestController
 @RequestMapping("/topicos")
 public class TopicosController {
-	
+
 	@Autowired
 	private TopicoRepository topicoRepository;
-	
+
 	@Autowired
 	private CursoRepository cursoRepository;
-	
-	//ANTES @RequestMapping(value="/topicos", method = RequestMethod.GET)
+
+	// ANTES @RequestMapping(value="/topicos", method = RequestMethod.GET)
 	@GetMapping
-	public List<TopicoDto> lista(String nomeCurso){
+	public List<TopicoDto> lista(String nomeCurso) {
 		if (nomeCurso == null) {
 			List<Topico> topicos = topicoRepository.findAll();
 			return TopicoDto.converter(topicos);
-		}else {
+		} else {
 			List<Topico> topicos = topicoRepository.findByCursoNome(nomeCurso);
 			return TopicoDto.converter(topicos);
 		}
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm form, UriComponentsBuilder uriBuilder){
+	public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm form, UriComponentsBuilder uriBuilder) {
 		Topico topico = form.converter(cursoRepository);
 		topicoRepository.save(topico);
-		
+
 		URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
 		return ResponseEntity.created(uri).body(new TopicoDto(topico));
 	}
-	
-	
-	
-	
-	
-	
+
 }
