@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @Configuration
 public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
-	// Após configurado, o padrão do Security, é bloquear tudo, até que eu implemente algo
+	// Após configurado, o padrão do Security é bloquear tudo, até que implemente algo
 		
 	//Configurações de autenticação
 	@Override
@@ -23,7 +23,9 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 		.antMatchers(HttpMethod.GET, "/topicos").permitAll()
-		.antMatchers(HttpMethod.GET, "/topicos/*").permitAll();
+		.antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
+		.anyRequest().authenticated()
+		.and().formLogin();
 	}
 	
 	//Configurações recursos staticos(css, js, img)
